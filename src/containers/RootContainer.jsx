@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import { editQuestionnaire } from '../actions/questionnaireActions.js';
 import Quesstionnaire from '../components/Questionnaire.jsx';
-import { Button, StyledLink } from '../components/UIElements.jsx';
+import { Button, StyledLink, Paper } from '../components/UIElements.jsx';
 
 // const Button =
 
@@ -14,16 +14,35 @@ class MainPageContainer extends Component {
 		super(props);
 	}
 	render() {
+		const { questionnaires } = this.props;
+		console.log('questionnaires', questionnaires);
+		var questionnairesHtml = [],
+			questionnairesIterator = questionnaires.values(),
+			iteratorValue;
+
+		do {
+			iteratorValue = questionnairesIterator.next();
+			if (iteratorValue.value) {
+				questionnairesHtml.push(
+					<Quesstionnaire questionnaire={iteratorValue.value} key={iteratorValue.value.id} />
+				);
+			}
+		} while (!iteratorValue.done);
+
 		return (
 			<div>
 				<h1>Questionnaries</h1>
 
-				<Button fullWidth color="primary">
-					<StyledLink to="/questionnaire/new">Add questionnaire</StyledLink>
-				</Button>
+				{questionnairesHtml}
+
+				<Link to="/questionnaire/new">
+					<Button fullWidth color="primary">
+						Add questionnaire
+					</Button>
+				</Link>
+
 				<br />
 				<br />
-				<Quesstionnaire />
 			</div>
 		);
 	}

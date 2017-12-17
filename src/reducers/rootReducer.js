@@ -1,7 +1,13 @@
-import { QUESTIONNAIRE_EDIT } from '../actions/questionnaireActions.js';
+import { QUESTIONNAIRE_SAVE } from '../actions/questionnaireActions.js';
 
 const typeActionsMap = {
-	[QUESTIONNAIRE_EDIT]: (state, action) => {}
+	[QUESTIONNAIRE_SAVE]: (state, action) => {
+		var { questionnaires } = state;
+		questionnaires.set(action.data.id, action.data);
+		return Object.assign({}, state, {
+			questionnaires
+		});
+	}
 };
 
 export default (
@@ -12,5 +18,5 @@ export default (
 	},
 	action
 ) => {
-	return state;
+	return action.type in typeActionsMap ? typeActionsMap[action.type](state, action) : state;
 };

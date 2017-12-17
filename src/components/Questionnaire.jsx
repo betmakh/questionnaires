@@ -8,9 +8,11 @@ const Quesstionnaire = props => {
 		ans = 'da';
 	return (
 		<Paper>
-			<h2>{ques}</h2>
-			<p>{ans}</p>
-			<Button>DA</Button>
+			<h2>{props.questionnaire.name}</h2>
+			<p>Total questions: {props.questionnaire.questions.length}</p>
+			<Button>Start</Button>
+			<Button>Edit</Button>
+			<Button>Delete</Button>
 		</Paper>
 	);
 };
