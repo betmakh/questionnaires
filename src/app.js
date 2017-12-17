@@ -1,28 +1,29 @@
 import React from 'react';
 import { render } from 'react-dom';
+import { Router } from 'react-router';
+import { Route, Switch, BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import { createBrowserHistory } from 'history';
 
 import store from './store.js';
 import Quesstionnaire from './components/Questionnaire.jsx';
 import MainPageContainer from './containers/RootContainer.jsx';
+import QuestionnaireContainer from './containers/QuestionnaireContainer.jsx';
+
+const browserHistory = createBrowserHistory();
 
 class App extends React.Component {
-	// constructor(props) {
-	// 	super(props);
-	// 	gapi.load('client:auth2', () => {
-	// 		// Retrieve the singleton for the GoogleAuth library and set up the client.
-	// 		window.auth2 = gapi.auth2.init({
-	// 			client_id: keys.googleAppId,
-	// 			cookiepolicy: 'single_host_origin'
-	// 		});
-	// 		// attachSignin(document.getElementById('customBtn'));
-	// 	});
-	// }
-
 	render() {
 		return (
 			<Provider store={store}>
-				<MainPageContainer />
+				<Router history={browserHistory}>
+					<BrowserRouter>
+						<Switch>
+							<Route exact path="/" component={MainPageContainer} />
+							<Route path="/questionnaire/:id" component={QuestionnaireContainer} />
+						</Switch>
+					</BrowserRouter>
+				</Router>
 			</Provider>
 		);
 	}

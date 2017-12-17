@@ -12,7 +12,8 @@ module.exports = {
     devServer: {
         publicPath: '/dist/',
         compress: true,
-        port: 9000
+        port: 9000,
+        historyApiFallback: true
     },
     watch: true,
     devtool: 'eval-source-map',
