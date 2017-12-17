@@ -1,13 +1,10 @@
 export const QUESTIONNAIRE_CREATE = 'QUESTIONNAIRE_CREATE';
-export const QUESTIONNAIRE_EDIT = 'QUESTIONNAIRE_EDIT';
+export const QUESTIONNAIRE_SAVE = 'QUESTIONNAIRE_SAVE';
 
-export const editQuestionnaire = (
-	data = {
-		id: `qst${Date.now()}`
-	}
-) => {
+export const saveQuestionnaire = data => {
+	console.log('data', data);
 	return {
-		type: QUESTIONNAIRE_EDIT,
+		type: QUESTIONNAIRE_SAVE,
 		data
 	};
 };

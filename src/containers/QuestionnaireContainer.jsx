@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { editQuestionnaire } from '../actions/questionnaireActions.js';
+import { saveQuestionnaire } from '../actions/questionnaireActions.js';
 import Quesstionnaire from '../components/Questionnaire.jsx';
 import { Button, StyledLink, Paper } from '../components/UIElements.jsx';
 
@@ -12,15 +12,12 @@ import { Button, StyledLink, Paper } from '../components/UIElements.jsx';
 class QuestionnaireContainer extends Component {
 	constructor(props) {
 		super(props);
-		const { questionnaire, questions } = props;
+		var { questionnaire, questions } = props;
+		questionnaire.name = questionnaire.name || 'New questionnaire';
 		this.state = {
 			questionnaire,
 			questions
 		};
-	}
-
-	componentWillMount() {
-		const { dispatch, match } = this.props;
 	}
 
 	addQuestion() {
@@ -37,12 +34,46 @@ class QuestionnaireContainer extends Component {
 			this.setState({ questions });
 		}
 	}
+
+	removeQuestion(id) {
+		var { questions } = this.state;
+		this.setState({
+			questions: questions.filter(qst => qst.id != id)
+		});
+	}
+
+	headerChanged() {
+		var { questionnaire } = this.state,
+			newName = this.headerElement.value.trim();
+		console.info('newName', newName);
+
+		if (newName.length) {
+			questionnaire.name = newName;
+			this.setState({ questionnaire });
+		}
+	}
+
+	save() {
+		console.log('this.props', this.props);
+		const { dispatch } = this.props;
+		var { questionnaire, questions } = this.state;
+		questionnaire.id = `qst${Date.now()}`;
+		questionnaire.questions = questions.map(ask => ask.id);
+		this.props.onSaveClick(questionnaire);
+	}
 	render() {
 		var { questions } = this.state;
 
 		return (
 			<div>
-				<h1>{this.state.questionnaire.name || 'New questionnaire'}</h1>
+				<input
+					type="text"
+					onChange={this.headerChanged.bind(this)}
+					ref={header => {
+						this.headerElement = header;
+					}}
+					value={this.state.questionnaire.name}
+				/>
 				<Paper>
 					<input
 						type="text"
@@ -52,11 +83,20 @@ class QuestionnaireContainer extends Component {
 					/>
 					<Button onClick={this.addQuestion.bind(this)}>Add</Button>
 					<hr />
-					<ul>{questions.map(qst => <li key={qst.id}>{qst.value}</li>)}</ul>
+					<ul>
+						{questions.map(qst => (
+							<li key={qst.id}>
+								{qst.value} <Button onClick={this.removeQuestion.bind(this, qst.id)}>Delete</Button>
+							</li>
+						))}
+					</ul>
 				</Paper>
 				<br />
-				<Button fullWidth color="primary">
-					<StyledLink to="/questionnaire/new">Save</StyledLink>
+				<Button color="primary" onClick={this.save.bind(this)}>
+					Save
+				</Button>
+				<Button>
+					<StyledLink to="/">Back</StyledLink>
 				</Button>
 			</div>
 		);
@@ -87,4 +127,12 @@ const mapStateToProps = (state, ownProps) => {
 	};
 };
 
-export default connect(mapStateToProps)(QuestionnaireContainer);
+const mapDispatchToProps = dispatch => {
+	return {
+		onSaveClick: (questionnaire, questions) => {
+			dispatch(saveQuestionnaire(questionnaire));
+		}
+	};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(QuestionnaireContainer);
