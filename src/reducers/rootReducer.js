@@ -1,4 +1,5 @@
 import { QUESTIONNAIRE_SAVE } from '../actions/questionnaireActions.js';
+import { parseStateFromLocalStorage, saveStateToLocalstorage } from '../utils.js';
 
 const typeActionsMap = {
 	[QUESTIONNAIRE_SAVE]: (state, action) => {
@@ -10,13 +11,7 @@ const typeActionsMap = {
 	}
 };
 
-export default (
-	state = {
-		questionnaires: new Map(),
-		questions: new Map(),
-		responses: new Map()
-	},
-	action
-) => {
+export default (state = parseStateFromLocalStorage(), action) => {
+	saveStateToLocalstorage(state);
 	return action.type in typeActionsMap ? typeActionsMap[action.type](state, action) : state;
 };

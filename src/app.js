@@ -9,6 +9,7 @@ import store from './store.js';
 import Quesstionnaire from './components/Questionnaire.jsx';
 import MainPageContainer from './containers/RootContainer.jsx';
 import QuestionnaireContainer from './containers/QuestionnaireContainer.jsx';
+import { saveStateToLocalstorage } from './utils.js';
 
 const browserHistory = createBrowserHistory();
 
@@ -28,6 +29,10 @@ class App extends React.Component {
 		);
 	}
 }
+
+window.onunload = () => {
+	saveStateToLocalstorage(store.getState());
+};
 
 const renderApp = () => {
 	render(<App />, document.getElementById('root'));
