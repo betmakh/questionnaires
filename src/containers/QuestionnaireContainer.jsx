@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 import { saveQuestionnaire, saveQuestions } from '../actions/questionnaireActions.js';
 import Quesstionnaire from '../components/Questionnaire.jsx';
-import { Button, StyledLink, Paper } from '../components/UIElements.jsx';
+import { Button, ButtonContainer, Paper, Input } from '../components/UIElements.jsx';
 
 class QuestionnaireContainer extends Component {
 	constructor(props) {
@@ -20,6 +20,7 @@ class QuestionnaireContainer extends Component {
 	}
 
 	addQuestion() {
+		console.log('this.questionInput', this.questionInput);
 		var { questions } = this.state,
 			value = this.questionInput.value.trim();
 
@@ -41,9 +42,9 @@ class QuestionnaireContainer extends Component {
 		});
 	}
 
-	headerChanged() {
+	headerChanged(event) {
 		var { questionnaire } = this.state,
-			newName = this.headerElement.value.trim();
+			newName = event.target.value.trim();
 
 		if (newName.length) {
 			questionnaire.name = newName;
@@ -61,28 +62,32 @@ class QuestionnaireContainer extends Component {
 
 		this.props.onSaveClick(questionnaire, questions);
 	}
+
 	render() {
 		var { questions } = this.state;
 
 		return (
 			<div>
-				<input
+				<Input
 					type="text"
+					name="headerInput"
+					fullWidth
 					onChange={this.headerChanged.bind(this)}
-					ref={header => {
-						this.headerElement = header;
-					}}
 					value={this.state.questionnaire.name}
 				/>
+				<br />
+				<br />
 				<Paper>
-					<input
+					<h3>Questions list</h3>
+					<Input
 						type="text"
-						ref={input => {
+						name="questionInput"
+						placeholder="New question ..."
+						innerRef={input => {
 							this.questionInput = input;
 						}}
 					/>
 					<Button onClick={this.addQuestion.bind(this)}>Add</Button>
-					<hr />
 					<ul>
 						{questions.map(qst => (
 							<li key={qst.id}>
@@ -91,15 +96,16 @@ class QuestionnaireContainer extends Component {
 						))}
 					</ul>
 				</Paper>
-				<br />
-				<Link to="/">
-					<Button color="primary" onClick={this.save.bind(this)}>
-						Save
-					</Button>
-				</Link>
-				<Link to="/">
-					<Button>Back</Button>
-				</Link>
+				<ButtonContainer>
+					<Link to="/">
+						<Button color="primary" onClick={this.save.bind(this)}>
+							Save
+						</Button>
+					</Link>
+					<Link to="/">
+						<Button color="red">Back</Button>
+					</Link>
+				</ButtonContainer>
 			</div>
 		);
 	}

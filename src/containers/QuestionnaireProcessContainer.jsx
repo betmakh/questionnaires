@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { saveAnswers } from '../actions/questionnaireActions.js';
 import Quesstionnaire from '../components/Questionnaire.jsx';
 import Question from '../components/Question.jsx';
-import { Button, StyledLink, Paper } from '../components/UIElements.jsx';
+import { Button, ButtonContainer, Paper } from '../components/UIElements.jsx';
 
 // const Button =
 
@@ -56,15 +56,19 @@ class QuestionnaireProcessContainer extends Component {
 						onQuestionUpdate={this.questionUpdated.bind(this)}
 					/>
 				)}
-				{!!currentQuestionIndex && <Button onClick={() => this.navigateQuestion(-1)}>prev. question</Button>}
-				{currentQuestionIndex <= questions.length &&
-					(currentQuestionIndex < questions.length ? (
-						<Button onClick={() => this.navigateQuestion(1)}>next question</Button>
-					) : (
-						<Link to="/">
-							<Button onClick={() => submitAnswers(answerSet)}>Submit unswers</Button>
-						</Link>
-					))}
+				<ButtonContainer>
+					{!!currentQuestionIndex && <Button onClick={() => this.navigateQuestion(-1)}>prev. question</Button>}
+					{currentQuestionIndex <= questions.length &&
+						(currentQuestionIndex < questions.length ? (
+							<Button onClick={() => this.navigateQuestion(1)}>next question</Button>
+						) : (
+							<Link to="/">
+								<Button color="primary" onClick={() => submitAnswers(answerSet)}>
+									Submit unswers
+								</Button>
+							</Link>
+						))}
+				</ButtonContainer>
 			</div>
 		);
 	}

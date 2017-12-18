@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import { deleteQuestionnaire } from '../actions/questionnaireActions.js';
 import Quesstionnaire from '../components/Questionnaire.jsx';
-import { Button, StyledLink, Paper } from '../components/UIElements.jsx';
+import { Button, Paper, ButtonContainer } from '../components/UIElements.jsx';
 
 // const Button =
 
