@@ -1,16 +1,22 @@
-export const QUESTIONNAIRE_CREATE = 'QUESTIONNAIRE_CREATE';
+export const QUESTIONS_SAVE = 'QUESTIONS_SAVE';
 export const QUESTIONNAIRE_SAVE = 'QUESTIONNAIRE_SAVE';
+export const QUESTIONNAIRE_DELETE = 'QUESTIONNAIRE_DELETE';
 
 export const saveQuestionnaire = data => {
-	console.log('data', data);
 	return {
 		type: QUESTIONNAIRE_SAVE,
 		data
 	};
 };
 
-export const createQuestionnaire = data => {
+export const deleteQuestionnaire = id => ({
+	type: QUESTIONNAIRE_DELETE,
+	id
+});
+
+export const saveQuestions = data => {
 	return {
-		type: QUESTIONNAIRE_CREATE
+		type: QUESTIONS_SAVE,
+		data
 	};
 };

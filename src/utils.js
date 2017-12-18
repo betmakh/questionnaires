@@ -1,21 +1,23 @@
+import Immutable from 'immutable';
+
 export const saveStateToLocalstorage = state => {
-	var result = {};
+	// var result = {};
 
-	for (var i in state) {
-		let entriesIterator = state[i].entries(),
-			mapProcessedResult = [],
-			currentEntry;
+	// for (var i in state) {
+	// 	let entriesIterator = state[i].entries(),
+	// 		mapProcessedResult = [],
+	// 		currentEntry;
 
-		do {
-			currentEntry = entriesIterator.next();
-			if (currentEntry.value) {
-				mapProcessedResult.push(currentEntry.value);
-			}
-		} while (!currentEntry.done);
-		result[i] = mapProcessedResult;
-	}
+	// 	do {
+	// 		currentEntry = entriesIterator.next();
+	// 		if (currentEntry.value) {
+	// 			mapProcessedResult.push(currentEntry.value);
+	// 		}
+	// 	} while (!currentEntry.done);
+	// 	result[i] = mapProcessedResult;
+	// }
 
-	return window.localStorage.setItem('appState', JSON.stringify(result));
+	return window.localStorage.setItem('appState', JSON.stringify(state.toJS()));
 };
 
 export const parseStateFromLocalStorage = () => {
@@ -23,9 +25,9 @@ export const parseStateFromLocalStorage = () => {
 		result = {},
 		dataObj,
 		initialData = {
-			questionnaires: '',
-			questions: '',
-			responses: ''
+			questionnaires: {},
+			questions: {},
+			responses: {}
 		};
 	try {
 		parsedData = JSON.parse(window.localStorage.getItem('appState'));
@@ -35,8 +37,9 @@ export const parseStateFromLocalStorage = () => {
 	dataObj = Object.assign({}, initialData, parsedData);
 
 	for (var i in dataObj) {
-		console.log('dataObj[i]', dataObj[i]);
-		result[i] = new Map(dataObj[i]);
+		result[i] = Immutable.Map(dataObj[i]);
 	}
-	return result;
+	// result = Immutable.Map(dataObj);
+	// console.log('result', result);
+	return Immutable.Map(result);
 };

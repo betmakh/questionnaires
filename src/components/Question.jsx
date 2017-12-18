@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 
-const Quesstion = props => {
-	var ques = 'tyche sooqa padla?',
-		ans = 'da';
+import { Button, Paper } from './UIElements.jsx';
+
+const Question = props => {
+	const { questionoObject } = props;
 	return (
-		<div>
-			<h2>{ques}</h2>
-			<p>{ans}</p>
-		</div>
+		<Paper>
+			<h2>{questionoObject.value}</h2>
+			<textarea name="" id="" cols="30" rows="10" />
+		</Paper>
 	);
 };
+
+export default Question;

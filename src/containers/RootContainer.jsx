@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { editQuestionnaire } from '../actions/questionnaireActions.js';
+import { deleteQuestionnaire } from '../actions/questionnaireActions.js';
 import Quesstionnaire from '../components/Questionnaire.jsx';
 import { Button, StyledLink, Paper } from '../components/UIElements.jsx';
 
@@ -14,26 +14,32 @@ class MainPageContainer extends Component {
 		super(props);
 	}
 	render() {
-		const { questionnaires } = this.props;
-		console.log('questionnaires', questionnaires);
+		const { questionnaires, onDeleteClick } = this.props;
 		var questionnairesHtml = [],
-			questionnairesIterator = questionnaires.values(),
+			questionnairesArray = questionnaires.valueSeq().toArray(),
 			iteratorValue;
 
-		do {
-			iteratorValue = questionnairesIterator.next();
-			if (iteratorValue.value) {
-				questionnairesHtml.push(
-					<Quesstionnaire questionnaire={iteratorValue.value} key={iteratorValue.value.id} />
-				);
-			}
-		} while (!iteratorValue.done);
+		// do {
+		// 	iteratorValue = questionnairesIterator.next();
+		// 	if (iteratorValue.value) {
+		// 		console.log('iteratorValue.value', iteratorValue.value);
+		// 		questionnairesHtml.push(
+		// 			<Quesstionnaire
+		// 				questionnaire={iteratorValue.value}
+		// 				onDeleteClick={onDeleteClick}
+		// 				key={iteratorValue.value.id}
+		// 			/>
+		// 		);
+		// 	}
+		// } while (!iteratorValue.done);
 
 		return (
 			<div>
 				<h1>Questionnaries</h1>
 
-				{questionnairesHtml}
+				{questionnairesArray.map(qst => (
+					<Quesstionnaire questionnaire={qst} onDeleteClick={onDeleteClick} key={qst.id} />
+				))}
 
 				<Link to="/questionnaire/new">
 					<Button fullWidth color="primary">
@@ -58,8 +64,15 @@ class MainPageContainer extends Component {
 
 const mapStateToProps = state => {
 	return {
-		questionnaires: state.questionnaires
+		questionnaires: state.get('questionnaires')
 	};
 };
 
-export default connect(mapStateToProps)(MainPageContainer);
+const mapDispatchToProps = dispatch => {
+	return {
+		onDeleteClick: id => {
+			dispatch(deleteQuestionnaire(id));
+		}
+	};
+};
+export default connect(mapStateToProps, mapDispatchToProps)(MainPageContainer);

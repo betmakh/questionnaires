@@ -9,6 +9,7 @@ import store from './store.js';
 import Quesstionnaire from './components/Questionnaire.jsx';
 import MainPageContainer from './containers/RootContainer.jsx';
 import QuestionnaireContainer from './containers/QuestionnaireContainer.jsx';
+import QuestionnaireProcessContainer from './containers/QuestionnaireProcessContainer.jsx';
 import { saveStateToLocalstorage } from './utils.js';
 
 const browserHistory = createBrowserHistory();
@@ -21,7 +22,8 @@ class App extends React.Component {
 					<BrowserRouter>
 						<Switch>
 							<Route exact path="/" component={MainPageContainer} />
-							<Route path="/questionnaire/:id" component={QuestionnaireContainer} />
+							<Route exact path="/questionnaire/:id" component={QuestionnaireContainer} />
+							<Route exact path="/questionnaire/start/:id" component={QuestionnaireProcessContainer} />
 						</Switch>
 					</BrowserRouter>
 				</Router>

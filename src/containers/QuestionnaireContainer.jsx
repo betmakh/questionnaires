@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+import Immutable from 'immutable';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { saveQuestionnaire } from '../actions/questionnaireActions.js';
+import { saveQuestionnaire, saveQuestions } from '../actions/questionnaireActions.js';
 import Quesstionnaire from '../components/Questionnaire.jsx';
 import { Button, StyledLink, Paper } from '../components/UIElements.jsx';
 
@@ -28,7 +29,7 @@ class QuestionnaireContainer extends Component {
 			this.questionInput.value = '';
 			questions.push({
 				value,
-				id: `qst${Date.now()}`
+				id: `ask${Date.now()}`
 			});
 
 			this.setState({ questions });
@@ -45,7 +46,6 @@ class QuestionnaireContainer extends Component {
 	headerChanged() {
 		var { questionnaire } = this.state,
 			newName = this.headerElement.value.trim();
-		console.info('newName', newName);
 
 		if (newName.length) {
 			questionnaire.name = newName;
@@ -54,12 +54,11 @@ class QuestionnaireContainer extends Component {
 	}
 
 	save() {
-		console.log('this.props', this.props);
 		const { dispatch } = this.props;
 		var { questionnaire, questions } = this.state;
-		questionnaire.id = `qst${Date.now()}`;
+		questionnaire.id = questionnaire.id || `qst${Date.now()}`;
 		questionnaire.questions = questions.map(ask => ask.id);
-		this.props.onSaveClick(questionnaire);
+		this.props.onSaveClick(questionnaire, questions);
 	}
 	render() {
 		var { questions } = this.state;
@@ -113,14 +112,13 @@ class QuestionnaireContainer extends Component {
 
 const mapStateToProps = (state, ownProps) => {
 	var questions = [],
-		questionnaire = state.questionnaires.get(ownProps.match.params.id) || {};
+		questionnaire = state.getIn(['questionnaires', ownProps.match.params.id]) || {};
 
 	if (questionnaire.questions) {
 		questionnaire.questions.forEach(el => {
-			questions.push(state.questions.get(el));
+			questions.push(state.getIn(['questions', el]));
 		});
 	}
-
 	return {
 		questionnaire,
 		questions
@@ -130,7 +128,10 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = dispatch => {
 	return {
 		onSaveClick: (questionnaire, questions) => {
+			console.log('questionnaire', questionnaire);
+			console.log('questions', questions);
 			dispatch(saveQuestionnaire(questionnaire));
+			dispatch(saveQuestions(questions));
 		}
 	};
 };
