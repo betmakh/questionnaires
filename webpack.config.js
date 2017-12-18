@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 let distFolder = path.resolve(__dirname, 'dist');
@@ -12,7 +13,12 @@ module.exports = env => {
                   filename: 'app.js',
                   path: distFolder
               },
-              plugins: [new UglifyJsPlugin()],
+              plugins: [
+                  new UglifyJsPlugin(),
+                  new webpack.DefinePlugin({
+                      'process.env.NODE_ENV': JSON.stringify('production')
+                  })
+              ],
               module: {
                   rules: [
                       {
