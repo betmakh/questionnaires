@@ -27,7 +27,7 @@ export const parseStateFromLocalStorage = () => {
 		initialData = {
 			questionnaires: {},
 			questions: {},
-			responses: {}
+			answers: {}
 		};
 	try {
 		parsedData = JSON.parse(window.localStorage.getItem('appState'));

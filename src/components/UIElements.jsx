@@ -35,4 +35,5 @@ export const Paper = styled.section`
 		0px 1px 10px 0px rgba(0, 0, 0, 0.12);
 	border-radius: 2px;
 	padding: 16px;
+	margin-bottom: 16px;
 `;

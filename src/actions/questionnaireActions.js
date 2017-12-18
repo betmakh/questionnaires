@@ -1,6 +1,7 @@
 export const QUESTIONS_SAVE = 'QUESTIONS_SAVE';
 export const QUESTIONNAIRE_SAVE = 'QUESTIONNAIRE_SAVE';
 export const QUESTIONNAIRE_DELETE = 'QUESTIONNAIRE_DELETE';
+export const ANSWERS_SAVE = 'ANSWERS_SAVE';
 
 export const saveQuestionnaire = data => {
 	return {
@@ -20,3 +21,8 @@ export const saveQuestions = data => {
 		data
 	};
 };
+
+export const saveAnswers = data => ({
+	type: ANSWERS_SAVE,
+	data
+});

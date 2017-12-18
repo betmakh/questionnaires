@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { saveQuestionnaire, saveQuestions } from '../actions/questionnaireActions.js';
+import { saveAnswers } from '../actions/questionnaireActions.js';
 import Quesstionnaire from '../components/Questionnaire.jsx';
 import Question from '../components/Question.jsx';
 import { Button, StyledLink, Paper } from '../components/UIElements.jsx';
@@ -14,37 +14,61 @@ import { Button, StyledLink, Paper } from '../components/UIElements.jsx';
 class QuestionnaireProcessContainer extends Component {
 	constructor(props) {
 		super(props);
+		const { questionnaire } = props;
 		this.state = {
 			currentQuestionIndex: 0,
-			answers: Immutable.Map()
+			answerSet: {
+				id: `ans${Date.now()}`,
+				questionnaireID: questionnaire.id,
+				responses: Immutable.Map()
+			}
 		};
 	}
 
-	nextQuestion() {
-		this.setState({ currentQuestionIndex: ++this.state.currentQuestionIndex });
+	navigateQuestion(delta) {
+		this.setState({ currentQuestionIndex: this.state.currentQuestionIndex + delta });
+	}
+
+	questionUpdated(data) {
+		var { answerSet } = this.state;
+		answerSet.responses = answerSet.responses.set(data.id, data.value);
+		this.setState({ answerSet });
 	}
 
 	render() {
-		var { currentQuestionIndex } = this.state,
-			{ questionnaire, questions } = this.props;
-		console.log('currentQuestionIndex', currentQuestionIndex);
+		var { currentQuestionIndex, answerSet } = this.state,
+			{ questionnaire, questions, submitAnswers } = this.props,
+			currentQuestion = questions[currentQuestionIndex];
 
 		return (
 			<div>
 				<h1>{questionnaire.name}</h1>
-				<Question questionoObject={questions[currentQuestionIndex]} />
+				{currentQuestion ? (
+					<Question
+						questionoObject={currentQuestion}
+						onQuestionUpdate={this.questionUpdated.bind(this)}
+						response={answerSet.responses.get(currentQuestion.id) || ''}
+					/>
+				) : (
+					<Question
+						email
+						response={answerSet.responses.get('email') || ''}
+						onQuestionUpdate={this.questionUpdated.bind(this)}
+					/>
+				)}
+				{!!currentQuestionIndex && <Button onClick={() => this.navigateQuestion(-1)}>prev. question</Button>}
+				{currentQuestionIndex <= questions.length &&
+					(currentQuestionIndex < questions.length ? (
+						<Button onClick={() => this.navigateQuestion(1)}>next question</Button>
+					) : (
+						<Link to="/">
+							<Button onClick={() => submitAnswers(answerSet)}>Submit unswers</Button>
+						</Link>
+					))}
 			</div>
 		);
 	}
 }
-
-// QuestionnaireProcessContainer.propTypes = {
-//   selectedSubreddit: PropTypes.string.isRequired,
-//   posts: PropTypes.array.isRequired,
-//   isFetching: PropTypes.bool.isRequired,
-//   lastUpdated: PropTypes.number,
-//   dispatch: PropTypes.func.isRequired
-// }
 
 const mapStateToProps = (state, ownProps) => {
 	var questions = [],
@@ -63,11 +87,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		onSaveClick: (questionnaire, questions) => {
-			console.log('questionnaire', questionnaire);
-			console.log('questions', questions);
-			dispatch(saveQuestionnaire(questionnaire));
-			dispatch(saveQuestions(questions));
+		submitAnswers: answerset => {
+			dispatch(saveAnswers(answerset));
 		}
 	};
 };

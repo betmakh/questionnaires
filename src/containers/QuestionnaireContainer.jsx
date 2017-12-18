@@ -8,8 +8,6 @@ import { saveQuestionnaire, saveQuestions } from '../actions/questionnaireAction
 import Quesstionnaire from '../components/Questionnaire.jsx';
 import { Button, StyledLink, Paper } from '../components/UIElements.jsx';
 
-// const Button =
-
 class QuestionnaireContainer extends Component {
 	constructor(props) {
 		super(props);
@@ -54,10 +52,13 @@ class QuestionnaireContainer extends Component {
 	}
 
 	save() {
+		// create new questionnaire object/update existed one
 		const { dispatch } = this.props;
 		var { questionnaire, questions } = this.state;
 		questionnaire.id = questionnaire.id || `qst${Date.now()}`;
+		questionnaire.responses = questionnaire.responses || [];
 		questionnaire.questions = questions.map(ask => ask.id);
+
 		this.props.onSaveClick(questionnaire, questions);
 	}
 	render() {
@@ -91,12 +92,14 @@ class QuestionnaireContainer extends Component {
 					</ul>
 				</Paper>
 				<br />
-				<Button color="primary" onClick={this.save.bind(this)}>
-					Save
-				</Button>
-				<Button>
-					<StyledLink to="/">Back</StyledLink>
-				</Button>
+				<Link to="/">
+					<Button color="primary" onClick={this.save.bind(this)}>
+						Save
+					</Button>
+				</Link>
+				<Link to="/">
+					<Button>Back</Button>
+				</Link>
 			</div>
 		);
 	}
@@ -128,9 +131,8 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = dispatch => {
 	return {
 		onSaveClick: (questionnaire, questions) => {
-			console.log('questionnaire', questionnaire);
-			console.log('questions', questions);
 			dispatch(saveQuestionnaire(questionnaire));
+			// save created question to reuse in other questionnaries(not implemented)
 			dispatch(saveQuestions(questions));
 		}
 	};

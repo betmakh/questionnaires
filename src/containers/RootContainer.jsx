@@ -14,24 +14,10 @@ class MainPageContainer extends Component {
 		super(props);
 	}
 	render() {
-		const { questionnaires, onDeleteClick } = this.props;
+		const { questionnaires, onDeleteClick, answers } = this.props;
 		var questionnairesHtml = [],
 			questionnairesArray = questionnaires.valueSeq().toArray(),
 			iteratorValue;
-
-		// do {
-		// 	iteratorValue = questionnairesIterator.next();
-		// 	if (iteratorValue.value) {
-		// 		console.log('iteratorValue.value', iteratorValue.value);
-		// 		questionnairesHtml.push(
-		// 			<Quesstionnaire
-		// 				questionnaire={iteratorValue.value}
-		// 				onDeleteClick={onDeleteClick}
-		// 				key={iteratorValue.value.id}
-		// 			/>
-		// 		);
-		// 	}
-		// } while (!iteratorValue.done);
 
 		return (
 			<div>
