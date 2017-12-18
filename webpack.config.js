@@ -5,8 +5,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 let distFolder = path.resolve(__dirname, 'dist');
 
 module.exports = env => {
-    console.log('env', env);
-    return env.prod == 'true'
+    return env && env.prod == 'true'
         ? {
               entry: './src/app.js',
               output: {
