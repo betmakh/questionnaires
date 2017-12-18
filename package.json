@@ -5,7 +5,8 @@
   "scripts": {
     "test": "./node_modules/.bin/jest",
     "watcher": "./node_modules/.bin/webpack",
-    "dev": "./node_modules/.bin/webpack-dev-server"
+    "dev": "./node_modules/.bin/webpack-dev-server",
+    "buildProd": "./node_modules/.bin/webpack --env.prod true"
   },
   "repository": {
     "type": "git",
@@ -33,6 +34,7 @@
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
     "styled-components": "^2.3.0",
+    "uglifyjs-webpack-plugin": "^1.1.4",
     "webpack": "^3.3.0"
   },
   "devDependencies": {

@@ -14,7 +14,12 @@ class QuestionnaireResultsContainer extends Component {
 		var { answers, questionnaire } = this.props;
 		console.log('answers', answers);
 
-		return <div>{JSON.stringify(answers, null, '\t')}</div>;
+		return (
+			<div>
+				<h1>There should be table with results, but I haven't it done</h1>
+				{JSON.stringify(answers, null, '\t')}
+			</div>
+		);
 	}
 }
 
